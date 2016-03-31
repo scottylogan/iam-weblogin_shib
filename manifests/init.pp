@@ -12,6 +12,9 @@ class weblogin_shib (
       'libapache2-mod-webkdc',
       'apache2',
       'apache2-bin',
+      # not declared as a dependency by the weblogin packages
+      # but needed (maybe only when WebKdcDebug is enabled?)
+      'libtime-duration-perl',
     ]:
     ensure => latest,
     notify => [
