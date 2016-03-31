@@ -1,4 +1,4 @@
-class weblogin (
+class weblogin_shib (
   $template_base = '/usr/share/weblogin',
   $template_name = 'itlab',
   $domain = 'itlab.stanford.edu',

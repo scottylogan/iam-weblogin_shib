@@ -26,13 +26,21 @@
     AllowOverride None
   </Directory>
 
+  <Directory /var/www/>
+    Options Indexes FollowSymLinks MultiViews ExecCGI
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  </Directory>
+
   <Location /webkdc-service>
     SSLRequireSSL
     SetHandler webkdc
   </Location>
 
-  <Locaiton /login>
-    AuthType Shibboleth
+  <Location /login>
+    AuthType shibboleth
+    ShibRequestSetting requireSession 1
     require valid-user
   </Location>
   

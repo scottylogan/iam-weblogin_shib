@@ -4,5 +4,5 @@ our $TEMPLATE_COMPILE_PATH = '/var/cache/weblogin';
 our $BYPASS_CONFIRM = 1;
 our $REMUSER_ENABLED = 1;
 our $REMUSER_EXPIRES = 60 * 60 * 8;
-our @REMUSER_PERMITTED_REALMS = ("itlab.stanford.edu");
-our @REMUSER_LOCAL_REALMS = ("itlab.stanford.edu");
+our @REMUSER_PERMITTED_REALMS = ("<%= @domain %>");
+our @REMUSER_LOCAL_REALMS = ("<%= @domain %>");
