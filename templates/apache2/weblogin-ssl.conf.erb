@@ -1,0 +1,59 @@
+<VirtualHost *:443>
+  ServerAdmin admin@<%= @domain %>
+  ServerName weblogin.<%= @domain %>
+
+  SSLEngine On
+# From https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
+  SSLProtocol all -SSLv2 -SSLv3
+  SSLHonorCipherOrder on
+  SSLCipherSuite          ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA 
+  SSLCertificateFile /etc/ssl/certs/server.pem
+  SSLCertificateChainFile /etc/ssl/certs/server-chain.pem
+  SSLCertificateKeyFile /etc/ssl/private/server.key
+  SSLOptions +FakeBasicAuth +StrictRequire +StdEnvVars
+
+  BrowserMatch "MSIE [2-6]" \
+    nokeepalive ssl-unclean-shutdown \
+    downgrade-1.0 force-response-1.0
+
+  # MSIE 7 and newer should be able to use keepalive
+  BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+
+  DocumentRoot /var/www/
+
+  <Directory />
+    Options FollowSymLinks
+    AllowOverride None
+  </Directory>
+
+  <Location /webkdc-service>
+    SSLRequireSSL
+    SetHandler webkdc
+  </Location>
+
+  <Locaiton /login>
+    AuthType Shibboleth
+    require valid-user
+  </Location>
+  
+  <Directory "<%= @template_base %>">
+    AllowOverride None
+    Options +ExecCGI
+    SSLRequireSSL
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  ScriptAlias /login "<%= @template_base %>/login.fcgi"
+  ScriptAlias /logout "<%= @template_base %>/logout.fcgi"
+#  ScriptAlias /pwchange "<%= @template_base %>/pwchange.fcgi"
+
+  Alias /help.html "<%= @template_base %>/<%= @template_name %>/templates/help.html"
+  Alias /images/ "<%= @template_base %>/<%= @template_name %>/images/"
+  Alias /css/ "<%= @template_base %>/<%= @template_name %>/css/"
+
+  ErrorLog /var/log/apache2/error.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
+

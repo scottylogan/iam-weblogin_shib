@@ -1,0 +1,22 @@
+[libdefaults]
+	default_realm = <%= @domain %>
+	kdc_timesync = 1
+	forwardable = true
+	proxiable = true
+	no-addresses = true
+
+[realms]
+	<%= @domain %> = {
+		kdc = kerberos.<%= @domain %>
+		kpasswd_server = kerberos.<%= @domain %>
+		admin_server = kerberos.<%= @domain %>
+		default_domain = <%= @domain %>
+	}
+
+[domain_realm]
+	.<%= @domain %> = <%= @domain %>
+	<%= @domain %> = <%= @domain %>
+
+[appdefaults]
+	forwardable = true
+	no-addresses = true
