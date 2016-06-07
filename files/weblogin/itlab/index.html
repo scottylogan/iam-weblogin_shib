@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IT Lab Login</title>
+    <link rel="stylesheet" type="text/css" href="../css/login.css"/>
+  </head>
+
+  <body id="homepage"
+        onload="document.login.username.focus();">
+
+    <section id="login">
+        <h1>IT Lab Login</h1>
+    
+      <section id="loginbox">
+        <p>
+          Test this IdP by logging into the <a
+          href='https://experiments.itlab.stanford.edu/test/'>Test
+          SP</a>
+        </p>
+      </section>
+
+      <section id="userinfo">
+        <p>
+          There are three test users available on this IdP:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th><th>Name</th><th>Affiliation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>jane</td><td>Jane Stanford</td><td>faculty</td>
+            </tr>
+            <tr>
+              <td>leland</td><td>Leland Stanford</td><td>staff</td>
+            </tr>
+            <tr>
+              <td>lelandjr</td><td>Leland Stanford, Jr</td><td>student</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Each account has the same password: <em>stanford</em>
+        </p>
+        <p>
+          Logging in as any of these users will return an assertion
+          to your SP similar to the ones that are released from the
+          production IdPs.
+        </p>
+      </section>
+    </section>
+
+    <section id='config'>
+      <h1>SP Configuration</h1>
+      <section id='configcontent'>
+        <p>
+          You will need to download or link to the metadata for this IdP at 
+          <a href='https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML'>https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML</a>
+        </p>
+        <p>
+          Unlike our production IdP, this service does not require metadata
+          for your SP.
+        </p>
+        <p><strong>
+          Your SP metadata will be required to move to production
+        </strong></p>
+    
+        <p>
+          Here are sample <em>MetadataProvider</em> and <em>SSO</em> /
+          <em>SessionInitiator</em> sections for your
+          <em>shibboleth2.xml</em> configuration file:
+        </p>
+        <p>
+          Metadata configuration for all Shibboleth 2.x SPs:
+        </p>
+        <pre>
+      &lt;MetadataProvider type="XML"
+                        uri="https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML"
+                        backingFilePath="itlab-metata.xml" reloadInterval="7200"&gt;
+      &lt;/MetadataProvider&gt;
+        </pre>
+        <p>
+          SSO configuration for Shibboleth 2.4 and newer SPs:
+        </p>
+        <pre>
+      &lt;SSO entityID="https://idp.itlab.stanford.edu/idp/shibboleth"&gt;
+        SAML2 SAML1
+      &lt;/SSO&gt;
+        </pre>
+        <p>
+          SessionInitiator for older SPs:
+        </p>
+        <pre>
+      &lt;SessionInitiator type="Chaining" Location="/DIRECT/ITLab" isDefault="true"
+                        id="itlab" entityID="https://idp.itlab.stanford.edu/idp/shibboleth"&gt;
+        &lt;SessionInitiator type="SAML2" acsIndex="1"
+                          template="bindingTemplate.html"/&gt;
+        &lt;SessionInitiator type="Shib1" acsIndex="5"/&gt;
+      &lt;/SessionInitiator&gt;
+        </pre>
+      </section>
+    </section>
+
+  </body>
+</html>

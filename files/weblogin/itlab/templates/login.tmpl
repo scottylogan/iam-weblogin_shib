@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IT Lab Login</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css"/>
+  </head>
+
+  <body id="homepage"
+        onload="document.login.username.focus();">
+    
+    <section id="login">
+      <h1>IT Lab Login</h1>
+    
+      <section id="loginbox">
+
+        [% IF notdefined %]
+<!--
+This is the template for the WebAuth login page. This page is called
+from login.fcgi script on the weblogin server. It displays a form
+asking the user for username and password. Variables used:
+
+error                  : some error occurred
+err_missinginput       : one of username or password missing
+err_username           : no username error
+err_password           : no password error
+err_loginfailed        : username and password were incorrect
+err_forced             : web site requires username/password login
+err_rejected           : username not permitted to authenticate
+RT                     : Response Token
+ST                     : Service Token
+username               : the username
+login_cancel           : a cancel URL was specified
+cancel_url             : the specified cancel URL
+show_remuser           : show a button for REMOTE_USER authentication
+remuser_failed         : REMOTE_USER authentication was tried and failed
+remuser_url            : where to send the user for REMOTE_USER auth
+-->
+        [% END %]
+
+        [% IF error %]
+          <div class="error" align="center">
+            <p><strong>
+              [% IF err_username && err_password %]
+                <!-- Error: no username or password submitted. -->
+                Error: Enter your username and password.
+              [% ELSIF err_username %]
+                <!-- Error: no username submitted. -->
+                Error: Enter your username.
+              [% ELSIF err_password %]
+                <!-- Error: no password submitted. -->
+                Error: Enter your password.
+              [% END %]
+
+              [% IF err_loginfailed %]
+                <!-- Error: login failed. -->
+                Error: You entered an incorrect username or password
+                (or both).
+              [% END %]
+
+              [% IF err_rejected %]
+                <!-- Error: user principal rejected. -->
+                Error: That username may not authenticate to this
+                service.
+              [% END %]
+
+              [% IF err_forced %]
+                <!-- Not really an error, forced login. -->
+                This web site requires that you log in with username
+                and password.
+              [% END %]
+            </strong></p>
+            <p>Click <a href="/help.html">help</a> for assistance.</p>
+          </div>
+        [% END %]
+
+        [% IF remuser_failed %]
+          <div class="error" align="center">
+            <p><strong>Error: Apache authentication was tried and
+              failed.</strong></p>
+          </div>
+        [% END %]
+
+        [% UNLESS remuser_failed and ! err_forced %]
+          <div class="error" align="center">
+            <p><strong>The application you are accessing requires
+              additional credentials.  Please re-login with your username and password.</strong></p>
+          </div>
+        [% END %]
+
+        <form name="login"
+              action="[% script_name FILTER html %]"
+              method="post"
+              autocomplete="OFF"
+              enctype="application/x-www-form-urlencoded">
+          <input  type="hidden" name="rm" value="index">
+          <input  type="hidden" name="RT"
+                  value="[% RT FILTER html %]">
+          <input  type="hidden" name="ST"
+                  value="[% ST FILTER html %]">
+          <input  type="hidden" name="login" value="yes">
+
+          <table>
+            <tr>
+              <td width="40%">
+                <label for="username">Username:</label>
+              </td>
+              <td>
+                <input  name="username"
+                        type="text"
+                        value="[% username FILTER html %]"
+                        size="18" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label  for="password">Password:</label>
+              </td>
+              <td>
+                <input  name="password"
+                        type="password"
+                        size="18" />
+                &nbsp;<a href='https://idp.itlab.stanford.edu/cpw/'>(change)</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <input type="submit" name="submit" value="Login" />
+              </td>
+            </tr>
+          </table>
+        </form>
+
+      </section>
+
+
+      <section id="userinfo">
+            <p>
+              There are three test users available on this IdP:
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th><th>Name</th><th>Affiliation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>jane</td><td>Jane Stanford</td><td>faculty</td>
+                </tr>
+                <tr>
+                  <td>leland</td><td>Leland Stanford</td><td>staff</td>
+                </tr>
+                <tr>
+                  <td>lelandjr</td><td>Leland Stanford, Jr</td><td>student</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Each account has the same password: <em>stanford</em>
+            </p>
+            <p>
+              Logging in as any of these users will return an assertion
+              to your SP similar to the ones that are released from the
+              production IdPs.
+            </p>
+      </section>
+    </section>
+
+    <section id='config'>
+      <h1>SP Configuration</h1>
+      <section id='configcontent'>
+        <p>
+          You will need to download or link to the metadata for this IdP at 
+          <a href='https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML'>https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML</a>
+        </p>
+        <p>
+          Unlike our production IdP, this service does not require metadata
+          for your SP.
+        </p>
+        <p><strong>
+          Your SP metadata will be required to move to production
+        </strong></p>
+  
+        <p>
+          Here are sample <em>MetadataProvider</em> and <em>SSO</em> /
+          <em>SessionInitiator</em> sections for your
+          <em>shibboleth2.xml</em> configuration file:
+        </p>
+        <p>
+          Metadata configuration for all Shibboleth 2.x SPs:
+        </p>
+        <pre>
+&lt;MetadataProvider type="XML"
+                  uri="https://idp.itlab.stanford.edu/idp/profile/Metadata/SAML"
+                  backingFilePath="itlab-metata.xml" reloadInterval="7200"&gt;
+&lt;/MetadataProvider&gt;
+        </pre>
+        <p>
+          SSO configuration for Shibboleth 2.4 and newer SPs:
+        </p>
+        <pre>
+&lt;SSO entityID="https://idp.itlab.stanford.edu/idp/shibboleth"&gt;
+  SAML2 SAML1
+&lt;/SSO&gt;
+        </pre>
+        <p>
+          SessionInitiator for older SPs:
+        </p>
+        <pre>
+&lt;SessionInitiator type="Chaining" Location="/DIRECT/ITLab" isDefault="true"
+                  id="itlab" entityID="https://idp.itlab.stanford.edu/idp/shibboleth"&gt;
+  &lt;SessionInitiator type="SAML2" acsIndex="1"
+                    template="bindingTemplate.html"/&gt;
+  &lt;SessionInitiator type="Shib1" acsIndex="5"/&gt;
+&lt;/SessionInitiator&gt;
+        </pre>
+      </section>
+    </section>
+  </body>
+</html>

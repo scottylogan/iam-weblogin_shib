@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeFilterPolicyGroup
+  id="DefaultFilterPolicy"
+  xmlns="urn:mace:shibboleth:2.0:afp"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+  <!-- Release basic attributes to itarch. -->
+  <AttributeFilterPolicy id="itarch">
+    <PolicyRequirementRule xsi:type="Requester" value="https://itarch.stanford.edu/shibboleth/" />
+
+    <AttributeRule attributeID="eduPersonPrincipalName">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="uid">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="mail">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+  </AttributeFilterPolicy>
+
+  <!-- Release attributes to SPs in the https://webapp.itlab.stanford.edu/aggregate/ aggregate. -->
+  <AttributeFilterPolicy id="webapp-aggregate">
+
+    <PolicyRequirementRule xsi:type="InEntityGroup" groupID="https://webapp.itlab.stanford.edu/aggregate/"/>
+
+    <AttributeRule attributeID="eduPersonScopedAffiliation">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="eduPersonPrincipalName">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="uid">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="mail">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="displayName">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+    <AttributeRule attributeID="eduPersonEntitlement">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+
+  </AttributeFilterPolicy>
+
+</AttributeFilterPolicyGroup>

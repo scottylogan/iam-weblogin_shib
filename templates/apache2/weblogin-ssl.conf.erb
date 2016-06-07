@@ -44,6 +44,11 @@
     require valid-user
   </Location>
   
+  ProxyPass /idp ajp://localhost:8009/idp
+  <Proxy ajp://localhost:8009/idp>
+    Allow from all
+  </Proxy>
+
   <Directory "<%= @template_base %>">
     AllowOverride None
     Options +ExecCGI

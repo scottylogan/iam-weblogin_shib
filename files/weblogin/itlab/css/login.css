@@ -1,0 +1,62 @@
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans:regular,bold|Droid+Serif:regular,italic,bold,bolditalic&subset=latin);
+
+
+
+/* HTML5 display-role reset for older browsers */
+article, aside,
+details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+  color: #777;
+  background-color: #820000;
+  font-family: 'Droid Sans', 'Helvetica', 'Verdana', sans-serif;
+}
+
+
+#config, #login {
+  max-width: 80%;
+  margin: 30px auto;
+  padding: 15px 30px;
+  background-color: #fff;
+}
+
+#loginbox, #userinfo, #configcontent {
+  text-align: left;
+  margin:auto;
+  padding: 10px;
+}
+
+h1, h2, h3, h4, h5, h6, a {
+    color: #820000;
+    text-decoration: none;
+}
+
+h1 {
+  margin: 0px;
+  font-size: 2.1em;
+  line-height: 1.2;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: left;
+  background-color: #fff;
+
+}
+
+h2 { margin: 26px 0 12px; }
+
+h3 { margin: 26px 0 12px; }
+
+h4 { margin: 22px 0 12px; }
+
+h5 { margin: 22px 0 10px; }
+
+h6 { margin: 20px 0 10px; }
+
+
+a:hover {
+    color: #777 !important;
+    text-decoration: underline;
+}
