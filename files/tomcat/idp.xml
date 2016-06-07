@@ -1,5 +1,5 @@
 <Context
-    docBase="/opt/shibboleth-idp/war/idp.war"
+    docBase="<%= @idp_dir %>/war/idp.war"
     privileged="true"
     antiResourceLocking="false"
     antiJARLocking="false"
